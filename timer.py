@@ -90,15 +90,14 @@ def fontSizeDown(self):
     my_font.config(size=my_font.cget("size")-2)
 
 
-def playAudio(file="", count=0):
-    for n in count:
-        pygame.mixer.init()
-        pygame.mixer.music.load(file)
-        mp3_length = mp3(file).info.length #音源の長さ取得
-        pygame.mixer.music.play(1) #再生開始。1の部分を変えるとn回再生(その場合は次の行の秒数も×nすること)
-        time.sleep(mp3_length + 0.25) #再生開始後、音源の長さだけ待つ(0.25待つのは誤差解消)
-        pygame.mixer.music.stop()
-        pygame.mixer.stop()
+def playAudio(file=""):
+    pygame.mixer.init()
+    pygame.mixer.music.load(file)
+    mp3_length = mp3(file).info.length #音源の長さ取得
+    pygame.mixer.music.play(1) #再生開始。1の部分を変えるとn回再生(その場合は次の行の秒数も×nすること)
+    time.sleep(mp3_length + 0.25) #再生開始後、音源の長さだけ待つ(0.25待つのは誤差解消)
+    pygame.mixer.music.stop()
+    pygame.mixer.stop()
 
 # メニューの設定
 m0 = Menu(root)
@@ -150,14 +149,14 @@ def show_time():
             flag6=1
             timeLabel.configure(fg="yellow")
             global singleBell
-            playBell = threading.Thread(target=playAudio, args=(singleBell,1))
+            playBell = threading.Thread(target=playAudio, args=(singleBell))
             playBell.start()
 
         elif (min>=7) and flag7 != 1:
             flag7 = 1
             timeLabel.configure(fg="red")
             global doubleBell
-            playBell = threading.Thread(target=playAudio, args=(doubleBell,2))
+            playBell = threading.Thread(target=playAudio, args=(doubleBell))
             playBell.start() 
 
     root.after(200, show_time)
