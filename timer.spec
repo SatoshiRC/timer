@@ -21,7 +21,7 @@ a = Analysis(
 )
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
-a.datas+=[('sei_ge_bell01.mp3','.\\sei_ge_bell01.mp3','DATA')]
+a.datas+=[('sei_ge_bell01.mp3','.\\res\\sei_ge_bell01.mp3','DATA')]
 
 exe = EXE(
     pyz,

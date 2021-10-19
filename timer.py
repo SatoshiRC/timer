@@ -15,9 +15,14 @@ def resource_path(relative_path):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath("."), relative_path)
 
+#global varuable
+flag6=0
+flag7=0
+isStart = 0
+
 #load audio file
-singleBell = resource_path("./sei_ge_bell01.mp3")
-doubleBell = resource_path("./sei_ge_bell01.mp3")
+singleBell = resource_path(".\\res\\sei_ge_bell01.mp3")
+doubleBell = resource_path(".\\res\\sei_ge_bell01.mp3")
 
 #main window configure
 root = Tk()
@@ -41,50 +46,40 @@ def start():
     global flag7
     global start_time
     global isStart
+    global timeLabel
+    timeLabel.configure(fg="green")
     isStart = 1
     start_time = time.time()
     flag7 = 0
     flag6 = 0
-    def_page.tkraise()
 
 def reset_key(self):
-    global flag6
-    global flag7
-    global start_time
-    global isStart
-    start_time = time.time()
-    flag7 = 0
-    flag6 = 0
-    isStart = 0
-    buff1.set("00:00")
-    def_page.tkraise()
+    reset()
 
 def reset():
     global flag6
     global flag7
     global start_time
     global isStart
+    global timeLabel
     start_time = time.time()
     flag7 = 0
     flag6 = 0
     isStart = 0
+    timeLabel.configure(fg="green")
     buff1.set("00:00")
-    def_page.tkraise()
 
 def stop():
     global isStart
     isStart = 0
 
+#key command
 def control_S(self):
     global isStart
     if isStart:
         stop()
     else:
         start()
-        
-def changeFontSize():
-    global my_font
-    my_font.config(size=15)
 
 def fontSizeUp(self):
     global my_font
@@ -94,15 +89,16 @@ def fontSizeDown(self):
     global my_font
     my_font.config(size=my_font.cget("size")-2)
 
-def playAudio(file):
-    print(file)
-    pygame.mixer.init()
-    pygame.mixer.music.load(file)
-    mp3_length = mp3(file).info.length #音源の長さ取得
-    pygame.mixer.music.play(1) #再生開始。1の部分を変えるとn回再生(その場合は次の行の秒数も×nすること)
-    time.sleep(mp3_length + 0.25) #再生開始後、音源の長さだけ待つ(0.25待つのは誤差解消)
-    pygame.mixer.music.stop()
-    pygame.mixer.stop()
+
+def playAudio(file="", count=0):
+    for n in count:
+        pygame.mixer.init()
+        pygame.mixer.music.load(file)
+        mp3_length = mp3(file).info.length #音源の長さ取得
+        pygame.mixer.music.play(1) #再生開始。1の部分を変えるとn回再生(その場合は次の行の秒数も×nすること)
+        time.sleep(mp3_length + 0.25) #再生開始後、音源の長さだけ待つ(0.25待つのは誤差解消)
+        pygame.mixer.music.stop()
+        pygame.mixer.stop()
 
 # メニューの設定
 m0 = Menu(root)
@@ -112,7 +108,6 @@ m1 = Menu(m0, tearoff = False)
 m0.add_command(label="start", command=start)
 m0.add_command(label="stop", command=stop)
 m0.add_command(label="reset", command=reset)
-m0.add_command(label="font size", command=changeFontSize)
 
 # key bind
 root.bind_all('<r>',reset_key)
@@ -126,23 +121,11 @@ buff1.set('')
 my_font = font.Font(root,family="tahoma",size=400,weight="bold")
 
 def_page = Frame(root,bg='black')
-timeLabel = Label(def_page,textvariable=buff1,font=my_font,foreground="green",background='black').pack()
+timeLabel = Label(def_page,textvariable=buff1,font=my_font,foreground="green",background='black')
+timeLabel.pack()
 def_page.grid(row=0, column=0, sticky="nsew")
 
-page6 = Frame(root,bg='black')
-Label(page6,textvariable=buff1,font=my_font,foreground="yellow",background='black').pack()
-page6.grid(row=0, column=0, sticky="nsew")
-
-page7 = Frame(root,bg='black')
-Label(page7,textvariable=buff1,font=my_font,foreground="red",background='black').pack()
-page7.grid(row=0, column=0, sticky="nsew")
-
-def_page.tkraise()
-
 # 時刻の表示
-flag6=0
-flag7=0
-isStart = 0
 def show_time():
     global isStart
     if isStart:
@@ -165,29 +148,19 @@ def show_time():
 
         if (min>=6)and flag6!=1:
             flag6=1
-
+            timeLabel.configure(fg="yellow")
             global singleBell
-            playBell = threading.Thread(target=playAudio, args=(singleBell,))
+            playBell = threading.Thread(target=playAudio, args=(singleBell,1))
             playBell.start()
 
-            timeLabel.configure()
-
-            page6.tkraise()
         elif (min>=7) and flag7 != 1:
             flag7 = 1
-
+            timeLabel.configure(fg="red")
             global doubleBell
-            playBell = threading.Thread(target=playAudio, args=(doubleBell,))
-            playBell.start()
-
-            page7.tkraise()
-    my_font.configure
-
+            playBell = threading.Thread(target=playAudio, args=(doubleBell,2))
+            playBell.start() 
 
     root.after(200, show_time)
-
-
-
 
 show_time()
 root.mainloop()
