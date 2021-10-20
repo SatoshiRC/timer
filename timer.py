@@ -90,7 +90,7 @@ def fontSizeDown(self):
     my_font.config(size=my_font.cget("size")-2)
 
 
-def playAudio(file=""):
+def playAudio(file):
     pygame.mixer.init()
     pygame.mixer.music.load(file)
     mp3_length = mp3(file).info.length #音源の長さ取得
@@ -149,14 +149,14 @@ def show_time():
             flag6=1
             timeLabel.configure(fg="yellow")
             global singleBell
-            playBell = threading.Thread(target=playAudio, args=(singleBell))
+            playBell = threading.Thread(target=playAudio, args=(singleBell,))
             playBell.start()
 
         elif (min>=7) and flag7 != 1:
             flag7 = 1
             timeLabel.configure(fg="red")
             global doubleBell
-            playBell = threading.Thread(target=playAudio, args=(doubleBell))
+            playBell = threading.Thread(target=playAudio, args=(doubleBell,))
             playBell.start() 
 
     root.after(200, show_time)

@@ -6,7 +6,7 @@ block_cipher = None
 
 a = Analysis(
     ['timer.py'],
-    pathex=['D:\\Desktop'],
+    pathex=[],
     binaries=[],
     datas=[],
     hiddenimports=[],
@@ -21,7 +21,7 @@ a = Analysis(
 )
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
-a.datas+=[('sei_ge_bell01.mp3','.\\res\\sei_ge_bell01.mp3','DATA')]
+a.datas+=[('.\\res\\sei_ge_bell01.mp3','.\\res\\sei_ge_bell01.mp3','DATA')]
 
 exe = EXE(
     pyz,
